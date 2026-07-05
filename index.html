@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1b4332">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>¿Qué hay entre mi boca y el oído de Dios? Nada. | eduardo.atos.rel</title>
+
+<meta name="description" content="Un recorrido interior por la distancia que no existe. Obra interactiva de eduardo.atos.rel">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,200;1,200&display=swap');
+
+  :root {
+    --parchment: #f5efe6;
+    --gold: #b8860b;
+    --gold-light: #d4af37;
+    --dust: #8b7355;
+    --void: #1a0f0f;
+    --muted: #c9bfb0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--void); font-family: 'Cormorant Garamond', serif; overflow: hidden; height: 100vh; width: 100vw; }
+
+  #cosmos { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  canvas#stars { position: absolute; inset: 0; }
+
+  .page {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 1.2s ease; z-index: 10;
+  }
+  .page.active { opacity: 1; pointer-events: all; }
+
+  /* ── PORTADA ── */
+  .book-cover {
+    position: relative;
+    width: min(520px, 90vw);
+    padding: 56px 50px 64px;
+    background: linear-gradient(160deg, #1c0f0a 0%, #0d0608 60%, #1a0a0a 100%);
+    border: 1px solid rgba(184,134,11,0.3);
+    box-shadow: 0 0 60px rgba(200,119,58,0.12), inset 0 0 80px rgba(0,0,0,0.6);
+    text-align: center;
+  }
+  .book-cover::before { content: ''; position: absolute; inset: 12px; border: 1px solid rgba(184,134,11,0.15); pointer-events: none; }
+
+  .ornament { font-size: 1.1rem; color: var(--gold); letter-spacing: 0.5em; opacity: 0.6; margin-bottom: 26px; font-family: 'Cinzel', serif; }
+
+  .cover-title { font-family: 'Cinzel', serif; font-weight: 400; font-size: clamp(1.05rem, 3.2vw, 1.5rem); color: var(--parchment); line-height: 1.55; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .cover-title em { font-family: 'Crimson Pro', serif; font-weight: 200; font-style: italic; font-size: 1.15em; color: var(--gold-light); display: block; margin-top: 8px; letter-spacing: 0.12em; }
+
+  .divider { width: 70px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 28px auto; }
+
+  .cover-desc { font-family: 'Crimson Pro', serif; font-style: italic; font-weight: 200; font-size: 1rem; color: var(--dust); line-height: 1.8; margin-bottom: 32px; }
+
+  /* Botones portada */
+  .register-btn {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    border: 1px solid rgba(184,134,11,0.4);
+    padding: 14px 36px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-bottom: 12px;
+  }
+  .register-btn:hover { background: rgba(184,134,11,0.09); border-color: var(--gold-light); color: var(--gold-light); box-shadow: 0 0 20px rgba(184,134,11,0.15); }
+
+  .enter-btn {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    color: rgba(139,115,85,0.55);
+    border: 1px solid rgba(184,134,11,0.15);
+    padding: 12px 36px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-transform: uppercase;
+    width: 100%;
+  }
+  .enter-btn:hover { background: rgba(184,134,11,0.06); color: var(--dust); }
+
+  .register-note { font-family: 'Crimson Pro', serif; font-style: italic; font-weight: 200; font-size: 0.82rem; color: var(--dust); opacity: 0.55; margin-bottom: 20px; }
+
+  /* ── PÁGINA 2 ── */
+  #page2 .scroll-container { width: min(680px, 92vw); max-height: 88vh; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(184,134,11,0.3) transparent; padding: 0 8px; }
+  #page2 .scroll-container::-webkit-scrollbar { width: 3px; }
+  #page2 .scroll-container::-webkit-scrollbar-thumb { background: rgba(184,134,11,0.3); }
+
+  .chapter { background: linear-gradient(170deg, #130c08 0%, #0c0608 100%); border-left: 2px solid rgba(184,134,11,0.25); padding: 44px 52px 44px 48px; margin-bottom: 2px; position: relative; }
+  .chapter::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, rgba(184,134,11,0.2), transparent); }
+  .chapter-number { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.35em; color: var(--gold); opacity: 0.55; margin-bottom: 16px; text-transform: uppercase; }
+  .chapter h2 { font-family: 'Cinzel', serif; font-weight: 400; font-size: clamp(0.95rem, 2.5vw, 1.15rem); color: var(--parchment); line-height: 1.5; margin-bottom: 22px; letter-spacing: 0.04em; }
+  .chapter p { font-size: clamp(1rem, 2.2vw, 1.13rem); color: var(--muted); line-height: 1.95; font-weight: 300; }
+  .chapter p + p { margin-top: 16px; }
+  .chapter .verse { font-family: 'Crimson Pro', serif; font-style: italic; font-weight: 200; font-size: clamp(1.05rem, 2.4vw, 1.2rem); color: rgba(212,175,55,0.7); border-left: 1px solid rgba(184,134,11,0.25); padding-left: 20px; margin: 22px 0; line-height: 1.85; }
+
+  .page-nav { display: flex; justify-content: space-between; align-items: center; padding: 28px 0 8px; }
+  .page-nav button { font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.2em; color: var(--gold); border: 1px solid rgba(184,134,11,0.3); padding: 12px 28px; background: transparent; cursor: pointer; transition: all 0.35s; text-transform: uppercase; }
+  .page-nav button:hover { background: rgba(184,134,11,0.07); border-color: var(--gold-light); }
+  .page-indicator { font-family: 'Cinzel', serif; font-size: 0.6rem; color: var(--dust); letter-spacing: 0.2em; opacity: 0.6; }
+  .scroll-hint { font-family: 'Cinzel', serif; font-size: 0.58rem; color: var(--dust); letter-spacing: 0.3em; text-align: center; padding-top: 10px; opacity: 0.4; text-transform: uppercase; }
+
+  /* ── PÁGINA 3 ── */
+  #page3 .final-container { width: min(560px, 92vw); text-align: center; }
+  .sigil { width: 80px; height: 80px; margin: 0 auto 36px; }
+  .sigil svg { width: 100%; height: 100%; animation: rotateSigil 20s linear infinite; opacity: 0.55; }
+  @keyframes rotateSigil { to { transform: rotate(360deg); } }
+  .closing-title { font-family: 'Cinzel', serif; font-size: clamp(1rem, 3vw, 1.35rem); color: var(--parchment); letter-spacing: 0.1em; margin-bottom: 12px; }
+  .closing-subtitle { font-family: 'Crimson Pro', serif; font-style: italic; font-weight: 200; font-size: 1.1rem; color: var(--gold); letter-spacing: 0.06em; margin-bottom: 36px; opacity: 0.75; }
+  .meditation-block { background: rgba(255,255,255,0.02); border: 1px solid rgba(184,134,11,0.15); padding: 32px 40px; margin-bottom: 28px; position: relative; }
+  .meditation-block::before { content: '◆'; position: absolute; top: 12px; left: 12px; color: var(--gold); font-size: 0.5rem; opacity: 0.4; }
+  .meditation-block::after { content: '◆'; position: absolute; bottom: 12px; right: 12px; color: var(--gold); font-size: 0.5rem; opacity: 0.4; }
+  .meditation-block p { font-size: clamp(1rem, 2.3vw, 1.1rem); color: var(--muted); line-height: 2; font-weight: 300; }
+  .meditation-block p + p { margin-top: 14px; }
+  .final-verse { font-family: 'Crimson Pro', serif; font-style: italic; font-weight: 200; font-size: clamp(1.1rem, 2.8vw, 1.35rem); color: rgba(212,175,55,0.8); line-height: 1.9; margin-bottom: 32px; }
+
+  .access-block { border-top: 1px solid rgba(184,134,11,0.15); padding-top: 24px; margin-bottom: 16px; }
+  .access-btn-pay { display: inline-block; font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.2em; color: var(--gold-light); border: 1px solid rgba(184,134,11,0.4); padding: 13px 32px; background: transparent; cursor: pointer; transition: all 0.35s; text-decoration: none; text-transform: uppercase; }
+  .access-btn-pay:hover { background: rgba(184,134,11,0.1); box-shadow: 0 0 20px rgba(184,134,11,0.15); }
+  .access-note { font-family: 'Crimson Pro', serif; font-style: italic; font-weight: 200; font-size: 0.85rem; color: var(--dust); opacity: 0.6; margin-top: 10px; }
+
+  #page3 .page-nav { justify-content: center; margin-top: 24px; }
+
+  #overlay { position: fixed; inset: 0; background: var(--void); z-index: 100; pointer-events: none; opacity: 0; transition: opacity 0.55s ease; }
+  #overlay.flash { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div id="cosmos"><canvas id="stars"></canvas></div>
+<div id="overlay"></div>
+
+<!-- PAGE 1: PORTADA -->
+<div class="page active" id="page1">
+  <div class="book-cover">
+    <div class="ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+    <h1 class="cover-title">
+      ¿Qué hay entre mi boca<br>y el oído de Dios?
+      <em>nada.</em>
+    </h1>
+    <div class="divider"></div>
+    <p class="cover-desc">
+      Un recorrido interior por la distancia<br>
+      que no existe entre quien pregunta<br>
+      y aquello que todo lo contiene.
+    </p>
+
+    <p class="register-note">El libro es de acceso libre.<br>Dejá tu nombre y correo para continuar.</p>
+
+    <a class="register-btn"
+       href="https://forms.gle/y6mRecCHnnw9QWGi7"
+       target="_blank" rel="noopener">
+      Registrarse para leer &nbsp;→
+    </a>
+
+    <button class="enter-btn" onclick="goTo(2)">
+      Ya me registré — Entrar al libro
+    </button>
+  </div>
+</div>
+
+<!-- PAGE 2: DESARROLLO -->
+<div class="page" id="page2">
+  <div class="scroll-container">
+    <div class="chapter">
+      <div class="chapter-number">I · La imposibilidad de la distancia</div>
+      <h2>Dios no tiene oídos porque no es humano</h2>
+      <p>Decir que hablo <em>con</em> Dios ya es un error hermoso. Implica que hay dos orillas, un emisor y un receptor, un cable tenso entre dos puntos del universo. Pero poner a Dios en la finitud de lo físico es reducirlo al tamaño de nuestra laringe.</p>
+      <div class="verse">
+        Si Dios tuviera oídos, necesitaría también silencio.<br>
+        Y el silencio es una ausencia.<br>
+        Dios no conoce la ausencia.
+      </div>
+      <p>No hay boca que alcance ese oído porque ese oído no existe como tal. Lo que llamamos plegaria no viaja: ya está ahí. La palabra no parte: nunca estuvo separada.</p>
+    </div>
+    <div class="chapter">
+      <div class="chapter-number">II · El universo como cuerpo compartido</div>
+      <h2>Insertados, entrelazados — tú y el todo</h2>
+      <p>En este vasto universo no somos dos visitantes que se encontraron por azar. Estamos insertados el uno en el otro. Quizás Dios sea el todo y yo una parte con conciencia —la parte que se asombra, que duda, que nombra.</p>
+      <div class="verse">
+        El océano no conversa con la ola.<br>
+        Es la ola.<br>
+        Y la ola, al romperse, no muere:<br>
+        regresa a sí misma.
+      </div>
+      <p>Si yo soy una parte de Dios, entonces cada vez que pienso, Dios piensa. Cada vez que dudo, Dios se interroga a sí mismo. La conciencia no es un accidente del cosmos: es el cosmos mirándose al espejo.</p>
+    </div>
+    <div class="chapter">
+      <div class="chapter-number">III · La naturaleza dual del absoluto</div>
+      <h2>Paz y caos · Movimiento y transmutación</h2>
+      <p>Dios no es únicamente el orden sereno de las esferas. Es también la tormenta que parte el roble, la estrella que colapsa, la célula que muta. Paz y caos al mismo tiempo: no en contradicción, sino en danza.</p>
+      <div class="verse">
+        Lo que llamas destrucción<br>
+        es la materia recordando<br>
+        que puede ser otra cosa.
+      </div>
+      <p>La transmutación es el lenguaje de lo divino. Nada se crea ni se destruye —todo se convierte. Y en esa conversión perpetua, Dios no descansa: Dios <em>es</em> el movimiento.</p>
+    </div>
+    <div class="page-nav">
+      <button onclick="goTo(1)">← Portada</button>
+      <span class="page-indicator">II · III</span>
+      <button onclick="goTo(3)">Cierre →</button>
+    </div>
+    <p class="scroll-hint">↑ desplaza para leer ↓</p>
+  </div>
+</div>
+
+<!-- PAGE 3: CIERRE -->
+<div class="page" id="page3">
+  <div class="final-container">
+    <div class="sigil">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#b8860b">
+        <circle cx="50" cy="50" r="44" stroke-width="0.6"/>
+        <circle cx="50" cy="50" r="28" stroke-width="0.6"/>
+        <line x1="50" y1="6" x2="50" y2="94" stroke-width="0.5"/>
+        <line x1="6" y1="50" x2="94" y2="50" stroke-width="0.5"/>
+        <line x1="18" y1="18" x2="82" y2="82" stroke-width="0.4"/>
+        <line x1="82" y1="18" x2="18" y2="82" stroke-width="0.4"/>
+        <polygon points="50,12 88,69 12,69" stroke-width="0.6" fill="rgba(184,134,11,0.04)"/>
+        <circle cx="50" cy="50" r="5" stroke-width="0.8" fill="rgba(184,134,11,0.15)"/>
+      </svg>
+    </div>
+    <h2 class="closing-title">Si Dios no existe, yo no existo</h2>
+    <p class="closing-subtitle">— y viceversa —</p>
+    <div class="meditation-block">
+      <p>No hay nada entre mi boca y el oído de Dios porque no hay separación que cruzar. La pregunta misma era la respuesta disfrazada de duda. Yo no le hablo a Dios: yo soy Dios hablándose a sí mismo en la forma frágil y maravillosa de un ser que pregunta.</p>
+      <p style="margin-top:16px;">Y en esa pregunta —en ese instante de asombro— lo finito toca lo infinito. No como visitante. Como parte que reconoce al todo.</p>
+    </div>
+    <p class="final-verse">
+      Entre mi boca y el oído de Dios<br>
+      no hay distancia.<br>
+      Hay identidad.
+    </p>
+    <div class="access-block">
+      <a class="access-btn-pay" href="https://eduardoatosrel.lemonsqueezy.com/checkout/buy/dd89205c-ec7b-4b24-8d66-6cac61bfe224" target="_blank" rel="noopener">Acceso permanente · $3 USD</a>
+      <p class="access-note">eduardo.atos.rel</p>
+    </div>
+    <div class="page-nav">
+      <button onclick="goTo(2)">← Volver</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── STARS ──
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let W, H, stars = [], time = 0;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  function initStars() {
+    stars = [];
+    for (let i = 0; i < 320; i++) stars.push({ x: Math.random()*W, y: Math.random()*H, r: Math.random()*0.9+0.1, speed: Math.random()*0.015+0.003, phase: Math.random()*Math.PI*2, brightness: Math.random() });
+  }
+  function drawStars() {
+    ctx.clearRect(0,0,W,H); time += 0.008;
+    stars.forEach(s => {
+      const a = 0.15 + 0.5*s.brightness*(0.5+0.5*Math.sin(time*s.speed*60+s.phase));
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(${180+s.brightness*60},${160+s.brightness*40},${120+s.brightness*80},${a})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(drawStars);
+  }
+  window.addEventListener('resize', () => { resize(); initStars(); });
+  resize(); initStars(); drawStars();
+
+  // ── NAVIGATION ──
+  const overlay = document.getElementById('overlay');
+  function goTo(n) {
+    overlay.classList.add('flash');
+    setTimeout(() => {
+      document.querySelector('.page.active').classList.remove('active');
+      document.getElementById('page'+n).classList.add('active');
+      overlay.classList.remove('flash');
+      const sc = document.querySelector('#page'+n+' .scroll-container');
+      if (sc) sc.scrollTop = 0;
+    }, 550);
+  }
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(() => console.log("Service Worker registrado"))
+      .catch(err => console.log("Error:", err));
+  });
+}
+</script>
+</body>
+</html>
