@@ -17,7 +17,7 @@
     --parchment: #f5efe6;
     --gold: #b8860b;
     --gold-light: #d4af37;
-    --dust: #DB9C60;
+    --dust: #8b7355;
     --void: #1a0f0f;
     --muted: #c9bfb0;
   }
@@ -39,24 +39,20 @@
 
   /* ── PORTADA ── */
  .book-cover {
+  position: relative;
+  width: min(520px, 90vw);
+  padding: 56px 50px 64px;
   background: linear-gradient(
     160deg,
-    #6A452C 0%,
-    #9b3005fb 50%,
-    #a85924 100%
+    #1c0f0a 0%,
+    #0d0608 60%,
+    #1a0a0a 100%
   );
+  border: 1px solid rgba(184,134,11,0.3);
+  box-shadow: 0 0 60px rgba(200,119,58,0.12),
+              inset 0 0 80px rgba(0,0,0,0.6);
+  text-align: center;
 }
-    
-background: linear-gradient(
-    160deg,
-    #976841 0%,
-    #AE794B 60%,
-    #976841 100%
-
-    border: 1px solid rgba(184,134,11,0.3);
-    box-shadow: 0 0 60px rgba(200,119,58,0.12), inset 0 0 80px rgba(0,0,0,0.6);
-    text-align: center;
-  }
   .book-cover::before { content: ''; position: absolute; inset: 12px; border: 1px solid rgba(143, 107, 13, 0.884); pointer-events: none; }
 
   .ornament { font-size: 1.1rem; color: var(--gold); letter-spacing: 0.5em; opacity: 0.6; margin-bottom: 26px; font-family: 'Cinzel', serif; }
@@ -179,7 +175,6 @@ background: linear-gradient(
   alt="Libro luminoso"
   class="book-image"
 />
-portada.png
 
     <p class="register-note">El libro es de acceso libre.<br>Dejá tu nombre y correo para continuar.</p>
 
