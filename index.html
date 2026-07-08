@@ -18,7 +18,7 @@
     --gold: #b8860b;
     --gold-light: #d4af37;
     --dust: #DB9C60;
-    --void: #DB9C60;
+    --void: #744214;
     --muted: #c9bfb0;
   }
 
@@ -38,10 +38,14 @@
   .page.active { opacity: 1; pointer-events: all; }
 
   /* ── PORTADA ── */
-  .book-cover {
-    position: relative;
-    width: min(520px, 90vw);
-    padding: 56px 50px 64px;
+ .book-cover {
+  background: linear-gradient(
+    160deg,
+    #bc3905 0%,
+    #963711 50%,
+    #9a5629 100%
+  );
+}
     
 background: linear-gradient(
     160deg,
